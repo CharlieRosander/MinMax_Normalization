@@ -45,8 +45,8 @@ class Data:
             dataframe[column] = (dataframe[column] - col_min) / (col_max - col_min)
 
     @staticmethod
-    def save_to_csv(dataframe, name):
-        dataframe.to_csv(name + ".csv", index=False)
+    def save_to_csv(dataframe, file_name):
+        dataframe.to_csv(file_name + ".csv", index=False)
 
 
 csv = Data("Automobile_data (2).csv")
