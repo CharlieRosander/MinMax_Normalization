@@ -3,6 +3,9 @@ import numpy as np
 
 
 class Data:
+    value = None
+    columns_to_normalize = []
+
     def __init__(self, csv):
         self.csv_file = csv
 
@@ -11,66 +14,62 @@ class Data:
         csv_dataframe = pd.read_csv(csv.csv_file)
         return csv_dataframe
 
+    @classmethod
+    def data_preprocess(cls, value):
+        cls.value = value
+        if value == "show":
+            print(df_norm.isnull().sum())
+
+        elif value == "drop":
+            df_norm.dropna(inplace=True)
+
+        elif value == 0:
+            df_norm.fillna(0, inplace=True)
+            print(f"Changed NaN values to 0.\n{df_norm.isnull().sum()}")
+
     @staticmethod
-    def min_max_norm(dataframe):
-        pass
+    def check_dtype(columns):
+        return all(map(lambda x: isinstance(x, (int, float)), columns))
+
+    @classmethod
+    def set_column_names(cls, dataframe):
+        results = dataframe.apply(Data.check_dtype)
+        Data.columns_to_normalize = results[results == True].index
+
+    @staticmethod
+    def minMax_norm(dataframe):
+        for column in dataframe[Data.columns_to_normalize]:
+            col_min = dataframe[column].min()
+            col_max = dataframe[column].max()
+            dataframe[column + "_normalized"] = (dataframe[column] - col_min) / (col_max - col_min)
+
+    @staticmethod
+    def minMax_norm_replace(dataframe):
+        for column in dataframe:
+            if "_normalized" in column:
+                dataframe.drop(column, axis=1, inplace=True)
+
+        for column in dataframe[Data.columns_to_normalize]:
+            col_min = dataframe[column].min()
+            col_max = dataframe[column].max()
+            dataframe[column] = (dataframe[column] - col_min) / (col_max - col_min)
+
+    @staticmethod
+    def save_to_csv(dataframe, file_name):
+        dataframe.to_csv(file_name + ".csv", index=False)
 
 
 csv = Data("Automobile_data (2).csv")
 df = csv.read_csv()
 
-# def check_dtype(columns):
-#     return all(map(lambda x: isinstance(x, (int, float)), columns))
-#
-# results = df_norm.apply(check_dtype)
-# print(results)
+df_norm = csv.read_csv()
+df_norm_replaced = csv.read_csv()
 
-# def check_dtype(columns):
-#     return map(lambda x: isinstance(x, (int, float)), columns)
-#
-# results = df_norm.apply(check_dtype)
-# print(results)
-
-# columns_to_normalise = ["index", "wheel-base", "length", "horsepower", "average-mileage", "price"]
-# results = []
-# for column in columns_to_normalise:
-#     min = df_norm[column].min()
-#     max = df_norm[column].max()
-#     results.append(f"Normaliserad data i kolumn: {column} är: ")
-#     for value in df_norm[column]:
-#         x = value
-#         results.append([(x - min) / (max - min)])
-#
-# print(results)
-
-
-# for column in df_norm[["index", "wheel-base", "length", "horsepower", "average-mileage", "price"]]:
-#     col_min = df_norm[column].min()
-#     col_max = df_norm[column].max()
-#     for value in df_norm[column]:
-#         x = value
-#         df_norm.replace(x, (x - min) / (max - min), inplace=True)
-
-# print(df_norm.head(20))
-# print(results)
-# print(df_norm.loc[df_norm["index"] < -1])
-
-df_norm = df.copy()
-columns = ["index", "wheel-base", "length", "horsepower", "average-mileage", "price"]
-for column in columns:
-    col_min = df_norm[column].min()
-    col_max = df_norm[column].max()
-    df_norm[column + "_normalized"] = (df_norm[column] - col_min) / (col_max - col_min)
-
-# print(df_norm)
-
-for column in df_norm:
-    if "_normalized" in column:
-        df_norm = df_norm.drop(column, axis=1)
-        # print(column)
-for column in df_norm[["index", "wheel-base", "length", "horsepower", "average-mileage", "price"]]:
-    col_min = df_norm[column].min()
-    col_max = df_norm[column].max()
-    df_norm[column] = (df_norm[column] - col_min) / (col_max - col_min)
-
+Data.data_preprocess(0)
+Data.set_column_names(df_norm)
+print(Data.columns_to_normalize)
+# Data.minMax_norm(df_norm)
+# Data.minMax_norm_replace(df_norm_replaced)
+Data.minMax_norm_replace(df_norm)
 print(df_norm)
+# Data.save_to_csv(df_norm, "Normaliserad_csv")
