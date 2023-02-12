@@ -15,22 +15,22 @@ class Data:
         return csv_dataframe
 
     @classmethod
-    def data_preprocess(cls, value):
+    def data_preprocess(cls, dataframe, value):
         cls.value = value
         if value == "show":
-            print(df_norm.isnull().sum())
+            print(dataframe.isnull().sum())
 
         elif value == "drop":
-            df_norm.dropna(inplace=True)
+            dataframe.dropna(inplace=True)
 
         elif value == 0:
-            df_norm.fillna(0, inplace=True)
-            print(f"Changed NaN values to 0.\n{df_norm.isnull().sum()}")
+            dataframe.fillna(0, inplace=True)
+            print(f"Changed NaN values to 0.\n{dataframe.isnull().sum()}")
 
     @classmethod
     def set_columns(cls, dataframe):
         for col in dataframe.columns:
-            if all(isinstance(x, (int, float)) for x in df[col]):
+            if all(isinstance(x, (int, float)) for x in dataframe[col]):
                 Data.columns_to_normalize.append(col)
 
     @staticmethod
