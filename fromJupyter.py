@@ -49,7 +49,7 @@ class Data:
             dataframe[column] = (dataframe[column] - col_min) / (col_max - col_min)
 
 
-csv = Data("Automobile_data (2).csv")
+csv = Data("Automobile_data.csv")
 df = csv.read_csv()
 
 # #### Skapar ett nytt objekt av datan för att normalisera

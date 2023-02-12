@@ -29,7 +29,7 @@ class Data:
 
     @classmethod
     def set_columns(cls, dataframe):
-        for col in dataframe.columns:
+        for col in dataframe.columns[1:]:
             if all(isinstance(x, (int, float)) for x in dataframe[col]):
                 Data.columns_to_normalize.append(col)
 
@@ -56,7 +56,7 @@ class Data:
         dataframe.to_csv(file_name + ".csv", index=False)
 
 
-csv = Data("Automobile_data (2).csv")
+csv = Data("Automobile_data.csv")
 df = csv.read_csv()
 
 df_norm = csv.read_csv()
