@@ -67,9 +67,16 @@ df_norm_replaced = csv.read_csv()
 
 Data.data_preprocess(0)
 Data.set_column_names(df_norm)
-print(Data.columns_to_normalize)
+# print(Data.columns_to_normalize)
 # Data.minMax_norm(df_norm)
 # Data.minMax_norm_replace(df_norm_replaced)
 Data.minMax_norm_replace(df_norm)
-print(df_norm)
+# print(df_norm)
 # Data.save_to_csv(df_norm, "Normaliserad_csv")
+asd = []
+for col in df.columns:
+    if all(isinstance(x, (int, float)) for x in df[col]):
+       asd.append(col)
+
+print(df.columns)
+print(asd)
