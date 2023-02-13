@@ -27,11 +27,14 @@ class Data:
             dataframe.fillna(0, inplace=True)
             print(f"Changed NaN values to 0.\n{dataframe.isnull().sum()}")
 
+    @staticmethod
+    def check_dtype(columns):
+        return all(map(lambda x: isinstance(x, (int, float)), columns))
+
     @classmethod
-    def set_columns(cls, dataframe):
-        for col in dataframe.columns[1:]:
-            if all(isinstance(x, (int, float)) for x in dataframe[col]):
-                Data.columns_to_normalize.append(col)
+    def set_column_names(cls, dataframe):
+        results = dataframe.apply(Data.check_dtype)
+        Data.columns_to_normalize = results[results == True].index
 
     @staticmethod
     def min_max_norm(dataframe):
@@ -56,13 +59,13 @@ class Data:
         dataframe.to_csv(file_name + ".csv", index=False)
 
 
-csv = Data("Automobile_data.csv")
+csv = Data("pokemon_data.csv")
 df = csv.read_csv()
-
 df_norm = csv.read_csv()
 df_norm_replaced = csv.read_csv()
-Data.set_columns(df_norm)
+
+Data.set_column_names(df_norm)
 print(Data.columns_to_normalize)
 Data.min_max_norm_replace(df_norm)
 print(df_norm)
-Data.save_to_csv(df_norm, "Normaliserad_csv")
+# Data.save_to_csv(df_norm, "Normaliserad_csv")
