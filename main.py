@@ -1,6 +1,8 @@
 import pandas as pd
 
 
+# Program skrivet av Charlie Rosander
+
 class Data:
     value = None
     columns_to_normalize = []
