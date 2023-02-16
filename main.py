@@ -65,7 +65,7 @@ if __name__ == "__main__":
     df = csv.read_csv()
     df_norm = csv.read_csv()
 
-    Data.data_preprocess(df_norm, 0)
+    Data.data_preprocess(df_norm, "drop")
     Data.set_columns(df_norm)
     Data.min_max_norm(df_norm)
     Data.save_to_csv(df_norm)
