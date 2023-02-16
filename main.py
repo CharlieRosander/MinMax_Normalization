@@ -52,7 +52,7 @@ class Data:
         for column in dataframe[Data.columns_to_normalize]:
             col_min = dataframe[column].min()
             col_max = dataframe[column].max()
-            dataframe[column] = ((x for x in dataframe[column]) - col_min) / (col_max - col_min)
+            dataframe[column] = (dataframe[column] - col_min) / (col_max - col_min)
 
     @staticmethod
     def save_to_csv(dataframe):
@@ -65,7 +65,7 @@ if __name__ == "__main__":
     df = csv.read_csv()
     df_norm = csv.read_csv()
 
-    Data.data_preprocess(df_norm, "drop")
+    Data.data_preprocess(df_norm, 0)
     Data.set_columns(df_norm)
     Data.min_max_norm(df_norm)
     Data.save_to_csv(df_norm)
